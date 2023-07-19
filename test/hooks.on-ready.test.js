@@ -11,7 +11,8 @@ t.test('onReady should be called in order', t => {
   let order = 0
 
   fastify.addHook('onReady', function (done) {
-    t.equal(order++, 0, 'called in root')
+    console.log("coming from hooks.on-ready.test.js")
+    t.equal(order++, 0, 'called in root - line 15')
     t.equal(this.pluginName, fastify.pluginName, 'the this binding is the right instance')
     done()
   })
@@ -42,8 +43,10 @@ t.test('async onReady should be called in order', async t => {
   let order = 0
 
   fastify.addHook('onReady', async function () {
+
     await immediate()
-    t.equal(order++, 0, 'called in root')
+    console.log("coming from hooks.on-ready.test.js")
+    t.equal(order++, 0, 'called in root - line 49')
     t.equal(this.pluginName, fastify.pluginName, 'the this binding is the right instance')
   })
 
@@ -166,7 +169,8 @@ t.test('onReady should manage error in sync', t => {
   const fastify = Fastify()
 
   fastify.addHook('onReady', function (done) {
-    t.pass('called in root')
+    console.log("coming from hooks.on-ready.test.js")
+    t.pass('called in root - line 173')
     done()
   })
 
@@ -194,7 +198,8 @@ t.test('onReady should manage error in async', t => {
   const fastify = Fastify()
 
   fastify.addHook('onReady', function (done) {
-    t.pass('called in root')
+    console.log("coming from hooks.on-ready.test.js")
+    t.pass('called in root - line 203')
     done()
   })
 
@@ -222,7 +227,8 @@ t.test('onReady should manage sync error', t => {
   const fastify = Fastify()
 
   fastify.addHook('onReady', function (done) {
-    t.pass('called in root')
+    console.log("coming from hooks.on-ready.test.js")
+    t.pass('called in root - line 231')
     done()
   })
 
@@ -250,7 +256,8 @@ t.test('onReady can not add decorators or application hooks', t => {
   const fastify = Fastify()
 
   fastify.addHook('onReady', function (done) {
-    t.pass('called in root')
+    console.log("coming from hooks.on-ready.test.js")
+    t.pass('called in root - line 260')
     fastify.decorate('test', () => {})
 
     fastify.addHook('onReady', async function () {
@@ -272,7 +279,8 @@ t.test('onReady cannot add lifecycle hooks', t => {
   const fastify = Fastify()
 
   fastify.addHook('onReady', function (done) {
-    t.pass('called in root')
+    console.log("coming from hooks.on-ready.test.js")
+    t.pass('called in root - line 283')
     try {
       fastify.addHook('onRequest', (request, reply, done) => {})
     } catch (error) {
@@ -307,7 +315,8 @@ t.test('onReady does not call done', t => {
   const fastify = Fastify({ pluginTimeout: 500 })
 
   fastify.addHook('onReady', function (done) {
-    t.pass('called in root')
+    console.log("coming from hooks.on-ready.test.js")
+    t.pass('called in root - line 319')
     // done() // don't call done to test timeout
   })
 
