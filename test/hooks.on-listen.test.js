@@ -80,7 +80,7 @@ t.test('localhost onListen sync should log errors as warnings and continue', t =
 
   fastify.addHook('onListen', function (done) {
     t.pass('called onListen error')
-    throw new Error('FAIL ON LISTEN2')
+    throw new Error('FAIL ON LISTEN')
   })
 
   fastify.addHook('onListen', function (done) {
@@ -138,7 +138,7 @@ t.test('localhost Register onListen hook after a plugin inside a plugin', t => {
 
   fastify.register(fp(function (instance, opts, done) {
     instance.addHook('onListen', function (done) {
-      t.ok('called')
+      t.pass('called')
       done()
     })
     done()
@@ -146,12 +146,12 @@ t.test('localhost Register onListen hook after a plugin inside a plugin', t => {
 
   fastify.register(fp(function (instance, opts, done) {
     instance.addHook('onListen', function (done) {
-      t.ok('called')
+      t.pass('called')
       done()
     })
 
     instance.addHook('onListen', function (done) {
-      t.ok('called')
+      t.pass('called')
       done()
     })
 
@@ -184,7 +184,7 @@ t.test('localhost Register onListen hook after a plugin inside a plugin should l
 
   fastify.register(fp(function (instance, opts, done) {
     instance.addHook('onListen', function (done) {
-      t.ok('called')
+      t.pass('called')
       throw new Error('Plugin Error')
     })
     done()
@@ -192,12 +192,12 @@ t.test('localhost Register onListen hook after a plugin inside a plugin should l
 
   fastify.register(fp(function (instance, opts, done) {
     instance.addHook('onListen', function (done) {
-      t.ok('called')
+      t.pass('called')
       throw new Error('Plugin Error')
     })
 
     instance.addHook('onListen', function (done) {
-      t.ok('called')
+      t.pass('called')
       throw new Error('Plugin Error')
     })
 
@@ -331,9 +331,22 @@ t.test('nonlocalhost async onListen should be called in order', async t => {
 })
 
 t.test('nonlocalhost sync onListen should log errors as warnings and continue', t => {
-  t.plan(3)
-  const fastify = Fastify()
+  t.plan(4)
+  const stream = split(JSON.parse)
+  const fastify = Fastify({
+    forceCloseConnections: false,
+    logger: {
+      stream,
+      level: 'info'
+    }
+  })
   t.teardown(fastify.close.bind(fastify))
+
+  stream.on('data', message => {
+    if (message.msg.includes('FAIL ON LISTEN')) {
+      t.pass('Logged Error Message')
+    }
+  })
   let order = 0
 
   fastify.addHook('onListen', function (done) {
@@ -343,7 +356,7 @@ t.test('nonlocalhost sync onListen should log errors as warnings and continue', 
 
   fastify.addHook('onListen', function (done) {
     t.equal(order++, 0, '1st sync called in root')
-    done(new Error('FAIL ON LISTEN'))
+    throw new Error('FAIL ON LISTEN')
   })
 
   fastify.addHook('onListen', function (done) {
@@ -358,9 +371,23 @@ t.test('nonlocalhost sync onListen should log errors as warnings and continue', 
 })
 
 t.test('nonlocalhost async onListen should log errors as warnings and continue', async t => {
-  t.plan(3)
-  const fastify = Fastify()
+  t.plan(4)
+  const stream = split(JSON.parse)
+  const fastify = Fastify({
+    forceCloseConnections: false,
+    logger: {
+      stream,
+      level: 'info'
+    }
+  })
   t.teardown(fastify.close.bind(fastify))
+
+  stream.on('data', message => {
+    if (message.msg.includes('FAIL ON LISTEN')) {
+      t.pass('Logged Error Message')
+    }
+  })
+
   let order = 0
 
   fastify.addHook('onListen', async function () {
@@ -389,7 +416,7 @@ t.test('nonlocalhost Register onListen hook after a plugin inside a plugin', t =
 
   fastify.register(fp(function (instance, opts, done) {
     instance.addHook('onListen', function (done) {
-      t.ok('called')
+      t.pass('called')
       done()
     })
     done()
@@ -397,12 +424,12 @@ t.test('nonlocalhost Register onListen hook after a plugin inside a plugin', t =
 
   fastify.register(fp(function (instance, opts, done) {
     instance.addHook('onListen', function (done) {
-      t.ok('called')
+      t.pass('called')
       done()
     })
 
     instance.addHook('onListen', function (done) {
-      t.ok('called')
+      t.pass('called')
       done()
     })
 
@@ -435,7 +462,7 @@ t.test('nonlocalhost Register onListen hook after a plugin inside a plugin shoul
 
   fastify.register(fp(function (instance, opts, done) {
     instance.addHook('onListen', function (done) {
-      t.ok('called')
+      t.pass('called')
       throw new Error('Plugin Error')
     })
     done()
@@ -443,12 +470,12 @@ t.test('nonlocalhost Register onListen hook after a plugin inside a plugin shoul
 
   fastify.register(fp(function (instance, opts, done) {
     instance.addHook('onListen', function (done) {
-      t.ok('called')
+      t.pass('called')
       throw new Error('Plugin Error')
     })
 
     instance.addHook('onListen', function (done) {
-      t.ok('called')
+      t.pass('called')
       throw new Error('Plugin Error')
     })
 
@@ -583,9 +610,23 @@ t.test('onListen localhost should work in order with callback in async', t => {
 })
 
 t.test('onListen localhost sync with callback should log errors as warnings and continue', t => {
-  t.plan(5)
-  const fastify = Fastify()
+  t.plan(6)
+  const stream = split(JSON.parse)
+  const fastify = Fastify({
+    forceCloseConnections: false,
+    logger: {
+      stream,
+      level: 'info'
+    }
+  })
   t.teardown(fastify.close.bind(fastify))
+
+  stream.on('data', message => {
+    if (message.msg.includes('FAIL ON LISTEN')) {
+      t.pass('Logged Error Message')
+    }
+  })
+
   let order = 0
 
   fastify.addHook('onListen', function (done) {
@@ -595,7 +636,7 @@ t.test('onListen localhost sync with callback should log errors as warnings and 
 
   fastify.addHook('onListen', function (done) {
     t.equal(order++, 0, 'error sync called in root')
-    done(new Error('FAIL ON LISTEN'))
+    throw new Error('FAIL ON LISTEN')
   })
 
   fastify.addHook('onListen', function (done) {
@@ -614,9 +655,23 @@ t.test('onListen localhost sync with callback should log errors as warnings and 
 })
 
 t.test('onListen localhost async with callback should log errors as warnings and continue', t => {
-  t.plan(5)
-  const fastify = Fastify()
+  t.plan(6)
+  const stream = split(JSON.parse)
+  const fastify = Fastify({
+    forceCloseConnections: false,
+    logger: {
+      stream,
+      level: 'info'
+    }
+  })
   t.teardown(fastify.close.bind(fastify))
+
+  stream.on('data', message => {
+    if (message.msg.includes('FAIL ON LISTEN')) {
+      t.pass('Logged Error Message')
+    }
+  })
+
   let order = 0
 
   fastify.addHook('onListen', async function () {
@@ -649,7 +704,7 @@ t.test('Register onListen hook localhost with callback after a plugin inside a p
 
   fastify.register(fp(function (instance, opts, done) {
     instance.addHook('onListen', function (done) {
-      t.ok('called')
+      t.pass('called')
       done()
     })
     done()
@@ -657,12 +712,12 @@ t.test('Register onListen hook localhost with callback after a plugin inside a p
 
   fastify.register(fp(function (instance, opts, done) {
     instance.addHook('onListen', function (done) {
-      t.ok('called')
+      t.pass('called')
       done()
     })
 
     instance.addHook('onListen', function (done) {
-      t.ok('called')
+      t.pass('called')
       done()
     })
 
@@ -750,9 +805,23 @@ t.test('onListen nonlocalhost should work in order with callback in async', t =>
 })
 
 t.test('onListen nonlocalhost sync with callback should log errors as warnings and continue', t => {
-  t.plan(5)
-  const fastify = Fastify()
+  t.plan(6)
+  const stream = split(JSON.parse)
+  const fastify = Fastify({
+    forceCloseConnections: false,
+    logger: {
+      stream,
+      level: 'info'
+    }
+  })
   t.teardown(fastify.close.bind(fastify))
+
+  stream.on('data', message => {
+    if (message.msg.includes('FAIL ON LISTEN')) {
+      t.pass('Logged Error Message')
+    }
+  })
+
   let order = 0
 
   fastify.addHook('onListen', function (done) {
@@ -762,7 +831,7 @@ t.test('onListen nonlocalhost sync with callback should log errors as warnings a
 
   fastify.addHook('onListen', function (done) {
     t.equal(order++, 0, 'error sync called in root')
-    done(new Error('FAIL ON LISTEN'))
+    throw new Error('FAIL ON LISTEN')
   })
 
   fastify.addHook('onListen', function (done) {
@@ -781,9 +850,23 @@ t.test('onListen nonlocalhost sync with callback should log errors as warnings a
 })
 
 t.test('onListen nonlocalhost async with callback should log errors as warnings and continue', t => {
-  t.plan(5)
-  const fastify = Fastify()
+  t.plan(6)
+  const stream = split(JSON.parse)
+  const fastify = Fastify({
+    forceCloseConnections: false,
+    logger: {
+      stream,
+      level: 'info'
+    }
+  })
   t.teardown(fastify.close.bind(fastify))
+
+  stream.on('data', message => {
+    if (message.msg.includes('FAIL ON LISTEN')) {
+      t.pass('Logged Error Message')
+    }
+  })
+
   let order = 0
 
   fastify.addHook('onListen', async function () {
@@ -816,7 +899,7 @@ t.test('Register onListen hook nonlocalhost with callback after a plugin inside 
 
   fastify.register(fp(function (instance, opts, done) {
     instance.addHook('onListen', function (done) {
-      t.ok('called')
+      t.pass('called')
       done()
     })
     done()
@@ -824,12 +907,12 @@ t.test('Register onListen hook nonlocalhost with callback after a plugin inside 
 
   fastify.register(fp(function (instance, opts, done) {
     instance.addHook('onListen', function (done) {
-      t.ok('called')
+      t.pass('called')
       done()
     })
 
     instance.addHook('onListen', function (done) {
-      t.ok('called')
+      t.pass('called')
       done()
     })
 
