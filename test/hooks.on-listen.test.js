@@ -69,7 +69,7 @@ t.test('localhost onListen sync should log errors as warnings and continue', t =
   t.teardown(fastify.close.bind(fastify))
 
   stream.on('data', message => {
-    if (message.msg.includes('FAIL ON LISTEN')) {
+    if (message.msg && message.msg.includes('FAIL ON LISTEN')) {
       t.pass('Logged Error Message')
     }
   })
@@ -108,7 +108,7 @@ t.test('localhost onListen async should log errors as warnings and continue', as
   t.teardown(fastify.close.bind(fastify))
 
   stream.on('data', message => {
-    if (message.msg.includes('FAIL ON LISTEN')) {
+    if (message.msg && message.msg.includes('FAIL ON LISTEN')) {
       t.pass('Logged Error Message')
     }
   })
@@ -178,7 +178,7 @@ t.test('localhost Register onListen hook after a plugin inside a plugin should l
   t.teardown(fastify.close.bind(fastify))
 
   stream.on('data', message => {
-    if (message.msg.includes('Plugin Error')) {
+    if (message.msg && message.msg.includes('Plugin Error')) {
       t.pass('Logged Error Message')
     }
   })
@@ -256,7 +256,7 @@ t.test('localhost onListen encapsulation should be called in order and should lo
   t.teardown(fastify.close.bind(fastify))
 
   stream.on('data', message => {
-    if (message.msg.includes('Error in onListen hook of childTwo')) {
+    if (message.msg && message.msg.includes('Error in onListen hook of childTwo')) {
       t.pass('Logged Error Message')
     }
   })
@@ -344,7 +344,7 @@ t.test('nonlocalhost sync onListen should log errors as warnings and continue', 
   t.teardown(fastify.close.bind(fastify))
 
   stream.on('data', message => {
-    if (message.msg.includes('FAIL ON LISTEN')) {
+    if (message.msg && message.msg.includes('FAIL ON LISTEN')) {
       t.pass('Logged Error Message')
     }
   })
@@ -384,7 +384,7 @@ t.test('nonlocalhost async onListen should log errors as warnings and continue',
   t.teardown(fastify.close.bind(fastify))
 
   stream.on('data', message => {
-    if (message.msg.includes('FAIL ON LISTEN')) {
+    if (message.msg && message.msg.includes('FAIL ON LISTEN')) {
       t.pass('Logged Error Message')
     }
   })
@@ -456,7 +456,7 @@ t.test('nonlocalhost Register onListen hook after a plugin inside a plugin shoul
   t.teardown(fastify.close.bind(fastify))
 
   stream.on('data', message => {
-    if (message.msg.includes('Plugin Error')) {
+    if (message.msg && message.msg.includes('Plugin Error')) {
       t.pass('Logged Error Message')
     }
   })
@@ -534,7 +534,7 @@ t.test('nonlocalhost onListen encapsulation should be called in order and should
   t.teardown(fastify.close.bind(fastify))
 
   stream.on('data', message => {
-    if (message.msg.includes('Error in onListen hook of childTwo')) {
+    if (message.msg && message.msg.includes('Error in onListen hook of childTwo')) {
       t.pass('Logged Error Message')
     }
   })
@@ -623,7 +623,7 @@ t.test('onListen localhost sync with callback should log errors as warnings and 
   t.teardown(fastify.close.bind(fastify))
 
   stream.on('data', message => {
-    if (message.msg.includes('FAIL ON LISTEN')) {
+    if (message.msg && message.msg.includes('FAIL ON LISTEN')) {
       t.pass('Logged Error Message')
     }
   })
@@ -668,7 +668,7 @@ t.test('onListen localhost async with callback should log errors as warnings and
   t.teardown(fastify.close.bind(fastify))
 
   stream.on('data', message => {
-    if (message.msg.includes('FAIL ON LISTEN')) {
+    if (message.msg && message.msg.includes('FAIL ON LISTEN')) {
       t.pass('Logged Error Message')
     }
   })
@@ -818,7 +818,7 @@ t.test('onListen nonlocalhost sync with callback should log errors as warnings a
   t.teardown(fastify.close.bind(fastify))
 
   stream.on('data', message => {
-    if (message.msg.includes('FAIL ON LISTEN')) {
+    if (message.msg && message.msg.includes('FAIL ON LISTEN')) {
       t.pass('Logged Error Message')
     }
   })
@@ -863,7 +863,7 @@ t.test('onListen nonlocalhost async with callback should log errors as warnings 
   t.teardown(fastify.close.bind(fastify))
 
   stream.on('data', message => {
-    if (message.msg.includes('FAIL ON LISTEN')) {
+    if (message.msg && message.msg.includes('FAIL ON LISTEN')) {
       t.pass('Logged Error Message')
     }
   })
